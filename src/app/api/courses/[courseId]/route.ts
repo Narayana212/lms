@@ -17,19 +17,37 @@ export async function PATCH(
     }
 
     
-  
-  const {type}=value
-  const title = value[type]
-  
-const course = await sql`
-  UPDATE "Course"
-  SET
-    "title" = ${title}
-  WHERE
-    "id" = ${courseId}
-    AND "userId" = ${userId}
-  RETURNING *;
-`;
+    const {type}=value
+    const title=value[type]
+
+    let course;
+    
+    if(type==="title"){
+      course = await sql`
+      UPDATE "Course"
+      SET
+        "title" = ${title}
+      WHERE
+        "id" = ${courseId}
+        AND "userId" = ${userId}
+      RETURNING *;
+    `;
+
+    }else if(type==="description"){
+       course = await sql`
+      UPDATE "Course"
+      SET
+        "description" = ${title}
+      WHERE
+        "id" = ${courseId}
+        AND "userId" = ${userId}
+      RETURNING *;
+    `;
+    }
+
+    if(!course){
+      return new NextResponse("Internal Error", { status: 500 });
+    }
 
 
 
