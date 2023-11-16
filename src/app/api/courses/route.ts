@@ -13,14 +13,9 @@ export async function POST(request: Request) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        await sql`CREATE TABLE Category (
-            id UUID DEFAULT uuid_generate_v4() NOT NULL,
-            name VARCHAR(255) UNIQUE NOT NULL,
-            PRIMARY KEY (id)
-          );`
-
-        console.log("created")
-        NextResponse.json("Good", { status: 200 })
+        
+        const course:any = await sql`INSERT INTO "Course" ("title", "userId") VALUES (${title}, ${userId}) RETURNING "id"`;
+        return NextResponse.json(course.rows[0])
 
 
 
