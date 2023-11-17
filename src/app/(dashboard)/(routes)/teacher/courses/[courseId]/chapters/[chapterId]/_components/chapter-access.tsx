@@ -13,43 +13,43 @@ import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-import { Toaster ,toast} from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Toaster,toast } from "sonner";
 
-
-type Course = {
-  id: string;
-  userId: string;
-  title: string;
-  description: string | null;
-  imageurl: string | null;
-  price: number | null;
-  isPublished: boolean;
-  categoryId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+type Chapter = {
+    id: string;
+    title: string;
+    description: string | null;
+    videoUrl: string | null;
+    position: number;
+    ispublished: boolean;
+    isfree: boolean;
+    courseId: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
-interface DescriptionFormProps {
-  initialData: Course;
+interface ChapterAccessFormProps {
+  initialData: Chapter;
   courseId: string;
+  chapterId: string;
 };
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
-  }),
+  isFree: z.boolean().default(false),
 });
 
-export const DescriptionForm = ({
+export const ChapterAccessForm = ({
   initialData,
-  courseId
-}: DescriptionFormProps) => {
+  courseId,
+  chapterId
+}: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -59,17 +59,17 @@ export const DescriptionForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || ""
-    },
+      isFree: !!initialData.isfree
+    }
   });
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const value={...values,type:"description"}
-      await axios.patch(`/api/courses/${courseId}`, value);
-      toast.success("Course updated");
+      const value={...values,type:"access"}
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, value);
+      toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
     } catch {
@@ -80,14 +80,14 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Chapter access
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit description
+              Edit access
             </>
           )}
         </Button>
@@ -95,9 +95,13 @@ export const DescriptionForm = ({
       {!isEditing && (
         <p className={cn(
           "text-sm mt-2",
-          !initialData.description && "text-slate-500 italic"
+          !initialData.isfree && "text-slate-500 italic"
         )}>
-          {initialData.description || "No description"}
+          {initialData.isfree ? (
+            <>This chapter is free for preview.</>
+          ) : (
+            <>This chapter is not free.</>
+          )}
         </p>
       )}
       {isEditing && (
@@ -108,17 +112,20 @@ export const DescriptionForm = ({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'This course is about...'"
-                      {...field}
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                      Check this box if you want to make this chapter free for preview
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -133,7 +140,7 @@ export const DescriptionForm = ({
           </form>
         </Form>
       )}
-      <Toaster richColors/>
+      
     </div>
   )
 }

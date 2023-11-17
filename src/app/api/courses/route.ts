@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         }
 
         
-        const course:any = await sql`INSERT INTO "Course" ("title", "userId") VALUES (${title}, ${userId}) RETURNING "id"`;
+        const course:any = await sql`INSERT INTO Course (title, userId) VALUES (${title}, ${userId}) RETURNING id`;
         return NextResponse.json(course.rows[0])
 
 

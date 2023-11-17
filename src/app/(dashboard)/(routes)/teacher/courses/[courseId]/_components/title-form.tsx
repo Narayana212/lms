@@ -115,7 +115,7 @@ export const TitleForm = ({
           </form>
         </Form>
       )}
-      <Toaster richColors/>
+      <Toaster richColors  />
     </div>
   )
 }

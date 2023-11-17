@@ -9,7 +9,6 @@ import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-
 import {
   Form,
   FormControl,
@@ -19,37 +18,25 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-import { Toaster ,toast} from "sonner";
+import { Editor } from "@/components/editor";
+import { Preview } from "@/components/preview";
+import { Toaster,toast } from "sonner";
 
-
-type Course = {
-  id: string;
-  userId: string;
-  title: string;
-  description: string | null;
-  imageurl: string | null;
-  price: number | null;
-  isPublished: boolean;
-  categoryId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-interface DescriptionFormProps {
-  initialData: Course;
+interface ChapterDescriptionFormProps {
+  initialData: any;
   courseId: string;
+  chapterId: string;
 };
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
-  }),
+  description: z.string().min(1),
 });
 
-export const DescriptionForm = ({
+export const ChapterDescriptionForm = ({
   initialData,
-  courseId
-}: DescriptionFormProps) => {
+  courseId,
+  chapterId
+}: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -67,9 +54,9 @@ export const DescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const value={...values,type:"description"}
-      await axios.patch(`/api/courses/${courseId}`, value);
-      toast.success("Course updated");
+    const value={...values,type:"description"}
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, value);
+      toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
     } catch {
@@ -80,7 +67,7 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Chapter description
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -93,12 +80,17 @@ export const DescriptionForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn(
+        <div className={cn(
           "text-sm mt-2",
           !initialData.description && "text-slate-500 italic"
         )}>
-          {initialData.description || "No description"}
-        </p>
+          {!initialData.description && "No description"}
+          {initialData.description && (
+            <Preview
+              value={initialData.description}
+            />
+          )}
+        </div>
       )}
       {isEditing && (
         <Form {...form}>
@@ -112,9 +104,7 @@ export const DescriptionForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'This course is about...'"
+                    <Editor
                       {...field}
                     />
                   </FormControl>
@@ -133,7 +123,7 @@ export const DescriptionForm = ({
           </form>
         </Form>
       )}
-      <Toaster richColors/>
+     
     </div>
   )
 }
