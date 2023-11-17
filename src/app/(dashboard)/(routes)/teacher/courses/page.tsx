@@ -5,7 +5,7 @@ import React from 'react'
 export default function page() {
   return (
     <div>
-      <Link href="/teachers/create" className={buttonVariants()}>
+      <Link href="/teacher/create" className={buttonVariants()}>
         Create Course
       </Link>
     </div>
