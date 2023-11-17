@@ -57,7 +57,7 @@ const ChapterIdPage = async ({
   console.log(chapter.rows[0])
 
   return (
-    <>'
+    <>
     {!chapter.rows[0].ispublished && (
         <Banner
           variant="warning"
