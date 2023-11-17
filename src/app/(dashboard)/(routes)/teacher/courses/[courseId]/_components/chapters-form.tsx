@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Loader2, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Chapter, Course } from "@prisma/client";
+
 
 import {
   Form,
@@ -24,7 +24,7 @@ import { ChaptersList } from "./chapters-list";
 import { Toaster,toast } from "sonner";
 
 interface ChaptersFormProps {
-  initialData: Course & { chapters: Chapter[] };
+  initialData:any;
   courseId: string;
 };
 
