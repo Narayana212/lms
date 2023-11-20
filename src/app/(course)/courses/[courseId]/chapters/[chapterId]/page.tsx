@@ -10,6 +10,7 @@ import { VideoPlayer } from "./_components/video-player";
 import { Toaster } from "sonner";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import Link from "next/link";
 
 
 const ChapterIdPage = async ({
@@ -45,15 +46,10 @@ const ChapterIdPage = async ({
     chapterId: params.chapterId,
     courseId: params.courseId,
   })); 
-
-  console.log(purchase,"purchaserty")
-
-
-  console.log(muxData.playbackid,"chapters")
+  console.log(attachments,"userProgress")
   
 
-  
-
+  console.log(nextChapter,"nextChapter")
   const isLocked = !chapter.isfree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.iscompleted;
 
@@ -77,7 +73,7 @@ const ChapterIdPage = async ({
             chapterId={params.chapterId}
             title={chapter.title}
             courseId={params.courseId}
-            nextChapterId={"id"}
+            nextChapterId={nextChapter.rows[0]?.id || ""}
             playbackId={muxData?.playbackid!}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
@@ -94,7 +90,7 @@ const ChapterIdPage = async ({
              chapterId={params.chapterId}
              courseId={params.courseId}
              nextChapterId={nextChapter?.id}
-             isCompleted={!!userProgress?.isCompleted}
+             isCompleted={!!userProgress?.iscompleted}
            />
             ) : (
                 <CourseEnrollButton
@@ -107,12 +103,12 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
-          {!!attachments.length && (
+          {!!attachments.rows.length && (
             <>
               <Separator />
               <div className="p-4">
-                {attachments.map((attachment:any) => (
-                  <a 
+                {attachments.rows.map((attachment:any) => (
+                  <Link
                     href={attachment.url}
                     target="_blank"
                     key={attachment.id}
@@ -122,14 +118,14 @@ const ChapterIdPage = async ({
                     <p className="line-clamp-1">
                       {attachment.name}
                     </p>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </>
           )}
         </div>
       </div>
-      <Toaster/>
+      <Toaster richColors position="top-center"/>
     </div>
    );
 }

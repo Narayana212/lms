@@ -5,6 +5,7 @@ import { useState } from "react";
 import {toast} from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 
 
 interface CourseEnrollButtonProps {
@@ -37,7 +38,7 @@ export const CourseEnrollButton = ({
       size="sm"
       className="w-full md:w-auto"
     >
-      Enroll for Free
+      Enroll for {formatPrice(price)}
     </Button>
   )
 }

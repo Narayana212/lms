@@ -93,7 +93,8 @@ WHERE id = ${chapterId}
             attachments:attachments,
             muxData:muxData?.rows[0],
             nextChapter:nextChapter,
-            purchase:purchase.rows[0]
+            purchase:purchase.rows[0],
+            userProgress:userProgress.rows[0]
 
         };
     } catch (error) {

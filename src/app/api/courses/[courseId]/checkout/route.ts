@@ -52,7 +52,7 @@ export async function POST(
       RETURNING *;
     `;
 
-        return NextResponse.json({ url: `http://localhost:3000/courses/${course.rows[0].id}?success=1` });
+        return NextResponse.json({ url: `${process.env.VERCEL_URL}/courses/${course.rows[0].id}?success=1` });
     } catch (error) {
         console.log("[COURSE_ID_CHECKOUT]", error);
         return new NextResponse("Internal Error", { status: 500 })

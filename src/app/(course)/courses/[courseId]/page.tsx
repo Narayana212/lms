@@ -21,7 +21,7 @@ const CourseIdPage = async ({
     ch.position ASC;
   `
 
-  const chapters=await sql`select * from chapter where courseid = ${params.courseId}  `
+  const chapters=await sql`select * from chapter where courseid = ${params.courseId}`
   
   course=[...course.rows,{chapters:[chapters.rows[0]]}]
 
@@ -30,7 +30,7 @@ const CourseIdPage = async ({
   }
  
 
-  return redirect(`/courses/${course[0].courseid}/chapters/${course[1].chapters[0].id}`);
+  return redirect(`/courses/${course[0].courseid}/chapters/${chapters.rows[0].id}`);
 }
  
 export default CourseIdPage;

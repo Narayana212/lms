@@ -62,12 +62,13 @@ export async function PATCH(
     const { userId } = auth();
     const { courseId } = params;
     const value = await req.json();
-
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    console.log(params.courseId,userId)
     const courseOwner = await sql `SELECT * FROM course WHERE id = ${params.courseId} AND userId =${userId};    `
 
+    console.log('coua')
     if (courseOwner?.rows?.length===0) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -77,6 +78,7 @@ export async function PATCH(
 
     const { type } = value
     const title = value[type]
+    
 
     let course;
 
@@ -128,7 +130,18 @@ export async function PATCH(
 
       
     }
-
+    else if(type==="price"){
+      console.log(title)
+      course = await sql`
+    UPDATE Course
+    SET
+      price = ${title}
+    WHERE
+      id = ${courseId}
+      AND userId = ${userId}
+    RETURNING *;
+  `;
+    }
     if (!course) {
       return new NextResponse("Internal Error", { status: 500 });
     }

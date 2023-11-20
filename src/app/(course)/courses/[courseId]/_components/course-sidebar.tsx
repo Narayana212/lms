@@ -31,8 +31,9 @@ WHERE userId = ${userId}
   AND courseId = ${course[0].id};
 `
     
-const chapters=await sql`select * from chapter where courseid = '93ee32d9-bcd5-40ed-9292-093e57f7d21b'  `
+const chapters=await sql`select * from chapter where courseid = ${course[0].id} and ispublished=true  `
 console.log(course[0].id,"jkik")
+   console.log(course[3].userProgress,"hello1")
 
 
     
@@ -52,12 +53,12 @@ console.log(course[0].id,"jkik")
         )}
       </div>
       <div className="flex flex-col w-full">
-        {course[1].chapters.map((chapter:any) => (
+        {chapters.rows?.map((chapter:any) => (
           <CourseSidebarItem
             key={chapter.id}
             id={chapter.id}
             label={chapter.title}
-            isCompleted={course[2].userProgress?.length>0 && course[2].userProgress?.find((chapters:any)=>{
+            isCompleted={course[3].userProgress?.length>0 && course[3].userProgress?.find((chapters:any)=>{
                 if(chapters.chapterid===chapter.id){
                     return chapters.iscomplete
                 }
