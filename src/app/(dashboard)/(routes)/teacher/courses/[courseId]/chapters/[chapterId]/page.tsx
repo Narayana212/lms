@@ -142,8 +142,8 @@ const ChapterIdPage = async ({
           </div>
         </div>
 
-      </div>
-      <Toaster richColors/>
+      </div> 
+      <Toaster richColors position="top-center"/>
     </>
   );
 };

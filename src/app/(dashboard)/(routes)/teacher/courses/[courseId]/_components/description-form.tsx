@@ -133,7 +133,7 @@ export const DescriptionForm = ({
           </form>
         </Form>
       )}
-      <Toaster richColors/>
+      <Toaster richColors position="top-center"/>
     </div>
   )
 }

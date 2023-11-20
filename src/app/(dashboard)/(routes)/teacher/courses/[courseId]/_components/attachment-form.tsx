@@ -200,7 +200,7 @@ export const AttachmentForm = ({
           </div>
         </div>
       )} 
-      <Toaster richColors/>
+      <Toaster richColors position="top-center"/>
     </div>
   )
 }

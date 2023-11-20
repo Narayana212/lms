@@ -156,7 +156,7 @@ export const ChaptersForm = ({
           Drag and drop to reorder the chapters
         </p>
       )}
-      <Toaster/>
+      <Toaster position="top-center"/>
     </div>
   )
 }

@@ -78,7 +78,7 @@ export const Actions = ({
           <Trash className="h-4 w-4" />
         </Button>
       </ConfirmModal>
-      <Toaster/>
+      <Toaster richColors position="top-center"/>
     </div>
   )
 }

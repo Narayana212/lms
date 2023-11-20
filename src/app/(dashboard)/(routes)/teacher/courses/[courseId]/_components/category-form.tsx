@@ -132,7 +132,7 @@ export const CategoryForm = ({
           </form>
         </Form>
       )}
-      <Toaster richColors/>
+      <Toaster richColors position="top-center"/>
     </div>
   )
 }
